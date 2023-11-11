@@ -1,10 +1,8 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-import email_validator
+from flask import render_template, url_for, flash, redirect
+from blogapp import app, db, bcrypt
+from blogapp.forms import RegistrationForm, LoginForm
+from blogapp.models import User, Post
 
-app = Flask(__name__)
-
-app.config['SECRET_KEY'] = 'ec73ac9659fa8192fa7ac32f20a1bbe10593ddaa1eb6a6a1ba898b08c80b1fff'
 
 posts = [
     {
@@ -33,21 +31,29 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account Createed for {form.username.data}!', 'success')
-        return redirect(url_for('home'))
+        hashed_password = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
+        user = User(username=form.username.data,
+                    email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account Created, You can now Log in!', 'success')
+        return redirect(url_for('login'))
     return render_template('register.html', form=form, title='Register')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    return render_template('login.html', form=form, title='Login')
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
 
 
 @app.route('/about')
 def about():
     return render_template('about.html', title='About')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
