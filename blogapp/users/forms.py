@@ -1,14 +1,15 @@
+from flask import flash
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileAllowed, FileField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, ValidationError, Length, Email, EqualTo, Regexp
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from blogapp.models import User
 
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
-                           validators=[DataRequired(), Length(min=5, max=20)])
+                           validators=[DataRequired(message='username is required'), Length(min=5, max=20), Regexp('^[a-zA-Z0-9]*$', message='Username can only contain alphabets and numbers')])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password',
@@ -37,12 +38,14 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember me')
     submit = SubmitField('Log in')
 
+
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username',
-                           validators=[DataRequired(), Length(min=2, max=20)])
+                           validators=[DataRequired(message='username is required'), Length(min=5, max=20), Regexp('^[a-zA-Z0-9]*$', message='Username can only contain alphabets and numbers')])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
-    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    picture = FileField('Update Profile Picture', validators=[
+                        FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Update')
 
     def validate_username(self, username):
@@ -56,12 +59,9 @@ class UpdateAccountForm(FlaskForm):
         if email.data != current_user.email:
             user = User.query.filter_by(email=email.data).first()
             if user:
-                raise ValidationError('Email already taken. Try a different one.')
-            
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired() ])
-    content =  TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Post')
+                raise ValidationError(
+                    'Email already taken. Try a different one.')
+
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email',
@@ -71,7 +71,9 @@ class RequestResetForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
-            raise ValidationError('There is no account with that email. You must register first.')
+            raise ValidationError(
+                'Account doesn''t exist')
+
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
