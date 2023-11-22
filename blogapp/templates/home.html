@@ -1,8 +1,20 @@
-{%extends "layout.html"%} {%block content%} {%if current_user.is_authenticated%}
-<h2>Welcome back, {{current_user.username}}</h2>
-{%else%}
-<h2>Welcome</h2>
-{%endif%} {% for post in posts.items%}
+{%extends "layout.html"%}
+{%block content%}
+
+{% if current_user.is_authenticated %}
+  <div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Welcome back, {{ current_user.username }}!</h4>
+    <p>We're excited to have you here again. Enjoy exploring our latest posts and updates.</p>
+  </div>
+{% else %}
+  <div class="jumbotron">
+    <h1 class="display-4">Welcome to Flogger</h1>
+    <p class="lead">Where thoughts come to life and ideas find their way into words.</p>
+    <hr class="my-4">
+    <p>Join our community to share your stories and connect with like-minded individuals.</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('users.register') }}" role="button">Get Started</a>
+  </div>
+{% endif %} {% for post in posts.items%}
 <article class="media content-section">
   <img
     src="{{url_for('static', filename = 'profile_pics/' + post.author.img_file)}}"
@@ -21,7 +33,8 @@
         >{{ post.title }}</a
       >
     </h2>
-    <p class="article-content">{{ post.content }}</p>
+    <p class="article-content" style="display: inline;">{{ post.content[:200] | safe }}...</p>
+    <a href="{{ url_for('posts.post', post_id=post.id) }}" style="margin-left: 5px;">Read more</a>
   </div>
 </article>
 {%endfor%} 

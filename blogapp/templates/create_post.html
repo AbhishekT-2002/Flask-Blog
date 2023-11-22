@@ -34,5 +34,6 @@
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
     </form>
-
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='content') }}
     {%endblock content%}

@@ -78,3 +78,30 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .social-icon {
+    font-size: 24px;
+    color: #3498db; /* Twitter Blue */
+    margin: 0 10px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .social-icon:hover {
+    color: #1da1f2; /* Lighter Twitter Blue on hover */
+  }
+
+  .content-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+ }
+ 
+ .search-result {
+    margin-bottom: 20px;
+ }
+ 

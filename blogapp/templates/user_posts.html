@@ -1,8 +1,4 @@
-{%extends "layout.html"%} {%block content%} {%if current_user.is_authenticated%}
-<h2>Welcome back, {{current_user.username}}</h2>
-{%else%}
-<h2>Welcome</h2>
-{%endif%} 
+{%extends "layout.html"%} {%block content%} 
 <h1 class="mb-3">Posts by {{user.username}} ({{posts.total}})</h1>
 {% for post in posts.items%}
 <article class="media content-section">
@@ -23,7 +19,7 @@
         >{{ post.title }}</a
       >
     </h2>
-    <p class="article-content">{{ post.content }}</p>
+    <p class="article-content">{{ post.content |safe }}</p>
   </div>
 </article>
 {%endfor%} 
