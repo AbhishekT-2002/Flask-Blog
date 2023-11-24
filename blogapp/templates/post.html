@@ -7,7 +7,11 @@
   />
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{{url_for('users.user_posts', username=post.author.username)}}">{{ post.author.username }}</a>
+      <a
+        class="mr-2"
+        href="{{url_for('users.user_posts', username=post.author.username)}}"
+        >{{ post.author.username }}</a
+      >
       <small class="text-muted"
         >{{ post.date_posted.strftime('%d/%b/%Y, %H:%M') }}</small
       >
@@ -33,6 +37,40 @@
     <p class="article-content">{{ post.content | safe }}</p>
   </div>
 </article>
+
+
+<div class="mt-4">
+  <!-- Comment Form -->
+  <form method="POST" action="{{ url_for('posts.post', post_id=post.id) }}">
+    {{ comment_form.hidden_tag() }}
+    <div class="form-group">
+      {{ comment_form.text.label }} {{ comment_form.text(class="form-control")
+      }}
+    </div>
+    <div class="form-group">
+      {{ comment_form.submit(class="btn btn-primary") }}
+    </div>
+  </form>
+  <!-- Comment Section -->
+  <h3>Comments</h3>
+  <div class="list-group">
+      {% for comment in comments %}
+          <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                {%if comment.author.username == post.author.username%}
+                <h5 class="mb-1">{{ comment.author.username }}☑</h5>
+                {%else%}
+                <h5 class="mb-1">{{ comment.author.username }}</h5>
+                {%endif%}
+                  <small>{{ comment.date_commented.strftime('%d/%b/%Y, %H:%M') }}</small>
+              </div>
+              <p class="mb-1">{{ comment.text }}</p>
+          </div>
+      {% endfor %}
+  </div>
+  
+
+</div>
 <!-- Modal -->
 <div
   class="modal fade"
@@ -59,8 +97,11 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Close
         </button>
-        <form action="{{url_for('posts.delete_post', post_id = post.id)}}" method = "POST">
-            <input class = "btn btn-danger " type="submit" value = Delete>
+        <form
+          action="{{url_for('posts.delete_post', post_id = post.id)}}"
+          method="POST"
+        >
+          <input class="btn btn-danger" type="submit" value="Delete" />
         </form>
       </div>
     </div>

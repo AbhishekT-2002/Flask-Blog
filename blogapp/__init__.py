@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -16,6 +17,7 @@ login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 
 mail = Mail()
+migrate = Migrate()
 
 
 
@@ -27,6 +29,7 @@ def create_app(config_class = Config):
     ckeditor.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    migrate.init_app(app, db)
     from blogapp.users.routes import users
     from blogapp.posts.routes import posts
     from blogapp.main.routes import main

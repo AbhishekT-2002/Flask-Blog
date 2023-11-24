@@ -4,6 +4,7 @@ from blogapp.models import Post
 main = Blueprint('main', __name__)
 
 
+
 @main.route('/')
 @main.route('/home')
 def home():
@@ -27,3 +28,4 @@ def search():
     # Perform a simple search in titles and content
     results = Post.query.filter((Post.title.contains(query)) | (Post.content.contains(query))).all()
     return render_template('search_results.html', results=results, query=query)
+
