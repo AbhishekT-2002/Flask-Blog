@@ -1,4 +1,11 @@
-__pycache__/
+# Ignore virtual environment
+../flogenv/
+
+# Ignore Django migrations
+../migrations/
+
+# Ignore Python __pycache__
+../__pycache__/
 *.pyc
 *.pyo
 *.pyd
