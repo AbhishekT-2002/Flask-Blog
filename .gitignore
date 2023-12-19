@@ -1,0 +1,7 @@
+__pycache__/
+flogenv/
+migrations/
+.env
+*.pyc
+*.pyo
+*.pyd
