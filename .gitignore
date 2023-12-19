@@ -2,6 +2,7 @@ __pycache__/
 flogenv/
 migrations/
 .env
+.flaskenv
 *.pyc
 *.pyo
 *.pyd

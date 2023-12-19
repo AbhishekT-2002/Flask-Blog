@@ -24,7 +24,7 @@ migrate = Migrate()
 def create_app(config_class = Config):
     app = Flask(__name__)
     app.config.from_object(Config)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     db.init_app(app)
     bcrypt.init_app(app)
     ckeditor.init_app(app)
