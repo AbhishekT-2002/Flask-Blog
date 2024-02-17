@@ -1,4 +1,4 @@
- Flask Blog App
+# Flask Blog App
 
 This is a Flask-based blog application with features including user authentication, real-time password reset, commenting, rich-text blog writing, post editing and deletion, and profile customization.
 
